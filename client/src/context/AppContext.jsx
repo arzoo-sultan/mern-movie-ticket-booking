@@ -30,7 +30,7 @@ export const AppProvider = ({ children }) => {
             const { data } = await axios.get('/api/admin/is-admin', {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            console.log("ADMIN RESPONSE:", data);
+           // console.log("ADMIN RESPONSE:", data);
             setIsAdmin(data.isAdmin);
             
             if (!data.isAdmin && pathname.startsWith('/admin')) {
@@ -49,7 +49,7 @@ export const AppProvider = ({ children }) => {
         try {
             const { data } = await axios.get('/api/show/all');
             if (data.success) {
-                setShows(data.fetchShows);
+                setShows(data.shows);
             } else {
                 toast.error(data.message);
             }

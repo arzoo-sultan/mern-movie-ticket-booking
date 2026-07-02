@@ -8,13 +8,14 @@ import {
   UserButton,
   useUser,
 } from '@clerk/react';
+import { useAppContext } from '../context/AppContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isSignedIn } = useUser();
 
   const closeMenu = () => setIsOpen(false);
-
+   const {favouriteMovies}=useAppContext()
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -36,7 +37,7 @@ const Navbar = () => {
           <Link to="/movies" className="hover:text-primary transition-colors duration-200">Movies</Link>
           <Link to="/theaters" className="hover:text-primary transition-colors duration-200">Theaters</Link>
           <Link to="/releases" className="hover:text-primary transition-colors duration-200">Releases</Link>
-          <Link to="/favourites" className="hover:text-primary transition-colors duration-200">Favourites</Link>
+          {favouriteMovies.length > 0 && <Link to="/favourites" className="hover:text-primary transition-colors duration-200">Favourites</Link>}
         </div>
 
         {/* Right Section */}

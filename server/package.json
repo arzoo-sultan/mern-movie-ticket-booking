@@ -21,7 +21,9 @@
     "express": "^4.22.2",
     "inngest": "^4.11.0",
     "mongodb": "^7.3.0",
-    "mongoose": "^8.24.1"
+    "mongoose": "^8.24.1",
+    "stripe": "^22.3.0",
+    "svix": "^1.96.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

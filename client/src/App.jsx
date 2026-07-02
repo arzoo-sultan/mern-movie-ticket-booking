@@ -36,12 +36,12 @@ const App = () => {
   );
 }
      
-console.log({
-  isLoaded,
-  isSignedIn,
-  isAdmin,
-  isAdminLoading,
-});
+// console.log({
+//   isLoaded,
+//   isSignedIn,
+//   isAdmin,
+//   isAdminLoading,
+// });
   return (
     <>
       <Toaster />
@@ -56,6 +56,7 @@ console.log({
         <Route path="/movies/:id/:date" element={<SeatLayout />} />
         <Route path="/seats" element={<SeatLayout />} />
         <Route path="/my-bookings" element={<MyBookings />} />
+        <Route path="/loading/:nextUrl" element={<Loading />} />
         <Route path="/favourites" element={<Favourites />} />
 
         {/* Admin Routes */}

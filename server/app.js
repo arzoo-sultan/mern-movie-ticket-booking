@@ -8,12 +8,15 @@ import showRouter from "./routes/show.routes.js";
 import bookingRouter from "./routes/booking.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import userRouter from "./routes/user.routes.js";
+import { stripeWebhooks } from "./controllers/stripewebhook.controller.js";
 const app= express();
 app.use(cors({
     origin:process.env.CORS_ORIGIN,
     credentials:true
 }))
 app.use(clerkMiddleware())
+//Stripe Webhook
+app.use('/api/stripe',express.raw({type:'application/json'}),stripeWebhooks)
 app.use(express.json({limit:"16kb"}))
 app.use(express.urlencoded({ extended: true, limit: "16kb" }))
 app.use(express.static("public"))

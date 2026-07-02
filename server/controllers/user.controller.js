@@ -5,7 +5,7 @@ import Movie from "../models/movie.model.js"; // 1. Added missing Movie model im
 // Api controller function to get user Bookings
 export const getUserBookings = async (req, res) => {
   try {
-    const { userId } = req.auth;
+    const { userId } = req.auth();
 
     if (!userId) {
       return res.status(401).json({ success: false, message: "Unauthorized access." });
@@ -31,7 +31,7 @@ export const getUserBookings = async (req, res) => {
 export const updateFavourite = async (req, res) => {
   try {
     const { movieId } = req.body;
-    const { userId } = req.auth;
+    const { userId } = req.auth();
 
     if (!movieId) {
       return res.status(400).json({ success: false, message: "Movie ID is required." });

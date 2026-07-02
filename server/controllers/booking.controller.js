@@ -1,6 +1,6 @@
 import Booking from "../models/booking.model.js";
 import Show from "../models/show.model.js";  
-
+import stripe from 'stripe'
 // Cleaned up: Expects the already-fetched showData object instead of querying DB again
 const checkSeatsAvailability = (showData, selectedSeats) => {
   const occupiedSeats = showData.occupiedSeats;
@@ -19,9 +19,9 @@ const checkSeatsAvailability = (showData, selectedSeats) => {
 export const createBooking = async (req, res) => {
   try {
     // 1. Fixed: Changed req.auth() to req.auth to prevent middleware type crashes
-    const { userId } = req.auth; 
+    const { userId } = req.auth(); 
     const { showId, selectedSeats } = req.body;
-
+       const {origin }=req.headers;
     // 2. Performance Fix: Fetch show data once right at the beginning
     const showData = await Show.findById(showId).populate('movie');
     if (!showData) {
@@ -55,8 +55,37 @@ export const createBooking = async (req, res) => {
     await showData.save();
 
     // Stripe Gateway Placeholder...
-    
-    return res.json({ success: true, message: 'Booked successfully', bookingId: booking._id });
+    const stripeInstance=new stripe(process.env.STRIPE_SECRET_KEY)
+    //Creating line items for Stripe
+    const line_items=[{
+      price_data:{
+         currency: "usd",
+    product_data: {
+        name: showData.movie.title,
+    },
+    unit_amount: Math.floor(booking.amount * 100)},
+      quantity:1
+    }]
+    //session
+    const session=await stripeInstance.checkout.sessions.create(
+      {
+        success_url:`${origin}/loading/my-bookings`,
+        cancel_url:`${origin}/my-bookings`,
+        line_items:line_items,
+        mode:'payment',
+        metadata:{
+          bookingId:booking._id.toString()
+        },
+        expires_at:Math.floor(Date.now()/1000)+30 *60 ,//30 min
+        
+      }
+    )
+    booking.paymentLink=session.url
+
+    await booking.save()
+
+
+    return res.json({ success: true,url:session.url});
 
   } catch (error) {
     console.error("Error in createBooking:", error.message);

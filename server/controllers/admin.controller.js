@@ -14,7 +14,7 @@ export const getDashboardData = async (req, res) => {
     const [bookings, activeShows, totalUser] = await Promise.all([
       Booking.find({ isPaid: true }),
       Show.find({ showDateTime: { $gte: new Date() } }).populate('movie'),
-      clerkClient.users.getCount() // Correct Clerk SDK count method
+      clerkClient.users.getCount() 
     ]);
 
     const dashboardData = {
