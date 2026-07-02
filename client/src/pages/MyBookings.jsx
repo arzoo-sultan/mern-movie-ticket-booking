@@ -5,6 +5,7 @@ import BlurCircle from '../components/BlurCircle'
 import timeFormat from '../lib/TimeFormat'
 import { dateFormat } from '../lib/dateFormat'
 import { useAppContext } from '../context/AppContext'
+import { Link } from 'react-router-dom'
 const MyBookings = () => {
   const currency = import.meta.env.VITE_CURRENCY || '$'
   const [bookings, setBookings] = useState([])
@@ -92,9 +93,13 @@ const MyBookings = () => {
                 Paid
               </span>
             ) : (
-              <button className='bg-primary px-4 py-1.5 text-sm rounded-full font-medium cursor-pointer hover:bg-primary/80 transition-colors'>
+               <Link to={item.paymentLink}> 
+              <button 
+             
+              className='bg-primary px-4 py-1.5 text-sm rounded-full font-medium cursor-pointer hover:bg-primary/80 transition-colors'>
                 Pay Now
               </button>
+              </Link>
             )}
           </div>
         </div>
