@@ -3,7 +3,7 @@ import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { SignIn, useUser } from '@clerk/react'
 import { useAppContext } from "./context/AppContext";
-
+import Loading from "./components/Loading";
 // User Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -31,7 +31,7 @@ const App = () => {
  if (!isLoaded || isAdminLoading) {
   return (
     <div className="min-h-screen flex justify-center items-center">
-      Loading...
+     <Loading/>
     </div>
   );
 }

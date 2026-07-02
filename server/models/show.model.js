@@ -8,6 +8,11 @@ const showsSchema = new mongoose.Schema(
       required: true,
     },
 
+    title: {           // ← add this
+      type: String,
+       default: "",
+    },
+
     showDateTime: {
       type: Date,
       required: true,

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAuth, useUser } from "@clerk/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+const image_base_url= import.meta.env.VITE_TMDB_IMAGE_BASE_URL;
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -98,7 +99,10 @@ export const AppProvider = ({ children }) => {
         isAdminLoading, // Added to context distribution values
         shows, 
         favouriteMovies, 
-        fetchShows 
+        fetchShows,
+        user,
+        getToken,
+        image_base_url
     };
 
     return (

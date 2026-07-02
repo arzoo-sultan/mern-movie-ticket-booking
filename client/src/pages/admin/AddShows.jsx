@@ -5,10 +5,10 @@ import Title from '../../components/admin/Title';
 import { StarIcon, ChevronLeft, ChevronRight, X, Clock } from 'lucide-react'
 import { kconverter } from '../../lib/Kconverter';
 import toast from 'react-hot-toast';
-
+import { useAppContext } from '../../context/AppContext';
 const AddShows = () => {
   const currency = import.meta.env.VITE_CURRENCY
-
+    const{axios,getToken,user,image_base_url}=useAppContext();
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [fetchError, setFetchError]     = useState(null);
@@ -18,7 +18,7 @@ const AddShows = () => {
   const [showPrice, setShowPrice]         = useState("");
   const [selectedTimes, setSelectedTimes] = useState([]); // list of { id, dateTime, price }
   const [submitLoading, setSubmitLoading] = useState(false);
-
+  const [addingShow,setAddingShow]=useState(false)
   // ── Drag-to-scroll ──────────────────────────────────────────────
   const scrollRef  = useRef(null);
   const isDragging = useRef(false);
@@ -31,9 +31,12 @@ const AddShows = () => {
     setFetchError(null);
     try {
       // ── BACKEND SWAP ──
-      // const { data } = await axios.get('/api/movies/now-playing');
+       const { data } = await axios.get('/api/show/now-playing',{headers:{
+            Authorization:`Bearer ${await getToken()}`
+       }});
+       
       // setNowPlayingMovies(data.movies);
-      setNowPlayingMovies(dummyShowsData); // ← remove when backend is ready
+      setNowPlayingMovies(data.movies); 
     } catch (err) {
       setFetchError('Failed to load movies. Please try again.');
     } finally {
@@ -42,8 +45,9 @@ const AddShows = () => {
   };
 
   useEffect(() => {
+    if(user)
     fetchNowPlayingMovies();
-  }, []);
+  }, [user]);
 
   // Reset selected times when movie changes
   useEffect(() => {
@@ -102,12 +106,16 @@ const AddShows = () => {
     setSubmitLoading(true);
     try {
       // ── BACKEND SWAP ──
-      // await axios.post('/api/shows', payload);
-      console.log('Ready to send to backend:', payload); // ← remove when backend is ready
+      const {data}=await  axios.post('api/show/add',payload,{headers:{
+            Authorization:`Bearer ${await getToken()}`}})
+      
+      //console.log('Ready to send to backend:', payload); // ← remove when backend is ready
+      if(data.success)
       toast.success(`${selectedTimes.length} show(s) added for "${selectedMovie.title}"!`);
 
       setSelectedMovie(null);
       setSelectedTimes([]);
+      
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Failed to add shows. Try again.');
     } finally {
@@ -206,7 +214,7 @@ const AddShows = () => {
                     : 'hover:-translate-y-1.5 hover:shadow-xl hover:shadow-black/60'
                   }`}
               >
-                <img src={movie.poster_path} alt={movie.title || 'Movie Poster'} className="w-full h-56 object-cover brightness-90 transition duration-300" draggable={false} />
+                <img src={`${image_base_url}${movie.poster_path}`} alt={movie.title || 'Movie Poster'} className="w-full h-56 object-cover brightness-90 transition duration-300" draggable={false} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 px-2.5 pb-2.5 pt-6">
                   <p className="text-white text-xs font-semibold leading-tight truncate mb-1.5">{movie.title}</p>
@@ -231,7 +239,7 @@ const AddShows = () => {
       {selectedMovie && (
         <div className="mt-8 p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm max-w-lg">
           <div className="flex items-start gap-4">
-            <img src={selectedMovie.poster_path} alt={selectedMovie.title} className="w-16 h-24 object-cover rounded-lg flex-shrink-0" />
+            <img src={`${image_base_url}${selectedMovie.poster_path}`} alt={selectedMovie.title} className="w-16 h-24 object-cover rounded-lg flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <h3 className="text-white font-semibold text-base leading-snug">{selectedMovie.title}</h3>
               <p className="text-gray-400 text-xs mt-1 flex items-center gap-1">

@@ -30,7 +30,14 @@ export const getNowPlayingMovies = async (req, res) => {
 // Add Show
 export const addShow = async (req, res) => {
   try {
-    const { movieId, showsInput, showPrice } = req.body;
+    const { movieId, title, shows } = req.body; // ← destructure title
+
+    if (!movieId) {
+      return res.status(400).json({
+        success: false,
+        message: "movieId is required.",
+      });
+    }
 
     // Check if movie already exists in our database
     let movie = await Movie.findById(movieId);
@@ -69,33 +76,26 @@ export const addShow = async (req, res) => {
       });
     }
 
-    // Prepare shows array for bulk insertion
-    const showsToCreate = [];
+    // Resolve title: frontend title → DB movie title → fallback
+    const resolvedTitle = title || movie.title || "Unknown Title";
 
-    // Fallback if showsInput itself is not an array or missing
-    const validShowsInput = Array.isArray(showsInput) ? showsInput : [];
+    // Frontend sends: shows = [{ dateTime: "2026-06-30T14:00", price: 500 }, ...]
+    const validShows = Array.isArray(shows) ? shows : [];
 
-    for (const show of validShowsInput) {
-      const showDate = show.date;
+    const showsToCreate = validShows
+      .filter((s) => {
+        const validDate = s?.dateTime && !isNaN(new Date(s.dateTime).getTime());
+        const validPrice = s?.price !== undefined && Number(s.price) > 0;
+        return validDate && validPrice;
+      })
+      .map((s) => ({
+        movie: movieId,
+        title: resolvedTitle,           // ← save title on each show
+        showDateTime: new Date(s.dateTime),
+        showPrice: Number(s.price),
+        occupiedSeats: {},
+      }));
 
-      // Safeguard against 'is not iterable' type error
-      const timesArray = Array.isArray(show.time)
-        ? show.time
-        : show.time ? [show.time] : [];
-
-      for (const time of timesArray) {
-        const dateTimeString = `${showDate}T${time}`;
-
-        showsToCreate.push({
-          movie: movieId,
-          showDateTime: new Date(dateTimeString),
-          showPrice,
-          occupiedSeats: {},
-        });
-      }
-    }
-
-    // Insert to database if items exist, otherwise alert the client
     if (showsToCreate.length > 0) {
       await Show.insertMany(showsToCreate);
 
@@ -106,7 +106,8 @@ export const addShow = async (req, res) => {
     } else {
       return res.status(400).json({
         success: false,
-        message: "No shows were added. Please check that your 'showsInput' includes a valid date and time array.",
+        message:
+          "No shows were added. Please provide a valid 'shows' array with dateTime and price.",
       });
     }
   } catch (error) {
@@ -117,49 +118,47 @@ export const addShow = async (req, res) => {
     });
   }
 };
+
 // Api to get AllShows from database
 export const getShows = async (req, res) => {
   try {
-    // 1. Let MongoDB handle the sorting natively using .sort() instead of JS .toSorted()
     const shows = await Show.find({ showDateTime: { $gte: new Date() } })
-      .populate('movie')
-      .sort({ showDateTime: 1 }); 
+      .populate("movie")
+      .sort({ showDateTime: 1 });
 
     // filter unique Shows
-    const uniqueShows = new Set(shows.map(show => show.movie));
-    
+    const uniqueShows = new Set(shows.map((show) => show.movie));
+
     res.json({ success: true, shows: Array.from(uniqueShows) });
   } catch (error) {
     console.error("Error in getShows:", error);
     res.status(500).json({ success: false, message: error.message });
-  } 
+  }
 };
 
-// ApI to get a Single show from Api
-export const getShow = async (req, res) => { 
+// Api to get a Single show from Api
+export const getShow = async (req, res) => {
   try {
     const { movieId } = req.params;
-    
-    // get all upcoming shows for the movie
+
     const shows = await Show.find({
       movie: movieId,
-      showDateTime: { $gte: new Date() }
-    }).sort({ showDateTime: 1 }); // Sorted so times appear in chronological order
+      showDateTime: { $gte: new Date() },
+    }).sort({ showDateTime: 1 });
 
     const movie = await Movie.findById(movieId);
     const dateTime = {};
 
     shows.forEach((show) => {
-      // 2. Fixed Typos: added missing () to toISOString and aligned 'date' variable name
       const date = show.showDateTime.toISOString().split("T")[0];
-      
+
       if (!dateTime[date]) {
         dateTime[date] = [];
       }
-      
+
       dateTime[date].push({
         time: show.showDateTime,
-        showId: show._id 
+        showId: show._id,
       });
     });
 
