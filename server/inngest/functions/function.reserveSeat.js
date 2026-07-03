@@ -5,7 +5,7 @@ import Show from "../../models/show.model.js";
 const releaseSeatAndDeleteBooking = inngest.createFunction(
   {
     id: 'release-seat-and-delete-booking',
-    event: 'app/checkpayment'
+    triggers: [{ event: 'app/checkpayment' }]
   },
   async ({ event, step }) => {
     const tenMinutesLater = new Date(Date.now() + 10 * 60 * 1000);
