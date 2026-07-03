@@ -1,5 +1,5 @@
 import { inngest } from "../client.js"; 
-import User from "../../models/model/user.model.js";
+import User from "../../models/user.model.js";
 
 const syncUserUpdation = inngest.createFunction(
     { 

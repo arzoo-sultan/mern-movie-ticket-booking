@@ -1,6 +1,7 @@
 import axios from "axios";
 import Movie from "../models/movie.model.js";
 import Show from "../models/show.model.js";
+import { inngest } from "../inngest/client.js";
 
 // Get Now Playing Movies
 export const getNowPlayingMovies = async (req, res) => {
@@ -98,8 +99,12 @@ export const addShow = async (req, res) => {
 
     if (showsToCreate.length > 0) {
       await Show.insertMany(showsToCreate);
-
-      return res.json({
+     //Trigeger Inngest event for new show added
+       await inngest.send({
+        name:'app/show.added',
+        data:{movieTitle:movie.title}
+       })
+     return res.json({
         success: true,
         message: "Show(s) added successfully.",
       });

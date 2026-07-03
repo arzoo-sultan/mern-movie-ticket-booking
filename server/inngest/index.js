@@ -4,6 +4,8 @@ import syncUserCreation from "./functions/function.syncUserCreation.js";
 import syncUserDeletion from "./functions/function.syncUserDeletion.js";
 import syncUserUpdation from "./functions/function.syncUserUpdation.js";
 import sendBookingConfirmationEmail from "./functions/function.sendbookingconfirmatioemail.js";
+import sendReminder from "./functions/function.sendreminders.js";
+import newMovieNotification from "./functions/function.newMovieNotification.js";
 // Export everything together for your express/next handler to use
 export { inngest };
 export const functions = [
@@ -11,5 +13,7 @@ export const functions = [
     syncUserDeletion,
     syncUserUpdation,
     relaseSeatandDeleteBooking,
-    sendBookingConfirmationEmail
+    sendBookingConfirmationEmail,
+    sendReminder,
+     newMovieNotification
 ];
