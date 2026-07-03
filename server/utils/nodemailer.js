@@ -1,5 +1,5 @@
-import nodemailer from 'nodemailer';
-// Create a transporter using SMTP
+import nodemailer from "nodemailer";
+
 const transporter = nodemailer.createTransport({
   host: "smtp-relay.brevo.com",
   port: 587,
@@ -8,14 +8,23 @@ const transporter = nodemailer.createTransport({
     pass: process.env.SMTP_PASS,
   },
 });
+await transporter.verify();
+const sendEmail = async ({ to, subject, body }) => {
+  try {
+    const response = await transporter.sendMail({
+      from: process.env.SENDER_EMAIL,
+      to,
+      subject,
+      html: body,
+    });
 
-const sendEmail=async({to,subject,body})=>{
-const response=await transporter.sendMail({
-    from:process.env.SENDER_EMAIL,
-    to,
-    subject,
-    html:body,
-})
-return response
-}
+  
+
+    return response;
+  } catch (err) {
+    console.error("Error sending email:", err);
+    throw err;
+  }
+};
+
 export default sendEmail;
