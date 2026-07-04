@@ -175,19 +175,17 @@ This project provided hands-on experience with modern full-stack web development
 * Debugging production issues
 * Full-stack application architecture
 * Clean project organization
-
+* Email notifications
+* * Analytics dashboard
 ---
 
 # Future Improvements
-
-* Email notifications
 * QR code-based tickets
 * Real-time seat locking
 * AI-powered movie recommendations
 * Search and filtering
 * Movie reviews and ratings
 * Push notifications
-* Analytics dashboard
 * Multi-language support
 
 ---
