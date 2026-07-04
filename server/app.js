@@ -14,6 +14,9 @@ app.use(cors({
     origin:process.env.CORS_ORIGIN,
     credentials:true
 }))
+app.get("/debug-cors", (req, res) => {
+  res.json({ corsOrigin: process.env.CORS_ORIGIN });
+});
 app.use(clerkMiddleware())
 //Stripe Webhook
 app.use('/api/stripe',express.raw({type:'application/json'}),stripeWebhooks)
