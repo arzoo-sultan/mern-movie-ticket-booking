@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { assets } from '../assets/assets';
-import { MenuIcon, SearchIcon, Ticket, XIcon } from 'lucide-react';
+import { MenuIcon, Ticket, XIcon } from 'lucide-react';
 import {
   SignInButton,
   SignUpButton,
@@ -43,10 +43,7 @@ const Navbar = () => {
         {/* Right Section */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4 z-50 flex-shrink-0">
 
-          {/* Search */}
-          <button className="flex items-center justify-center hover:text-primary transition-colors duration-200">
-            <SearchIcon className="w-5 h-5" />
-          </button>
+          {/* Search icon removed because it was not functional */}
 
           {isSignedIn ? (
             // ── UserButton with My Bookings injected into the dropdown ──
@@ -133,10 +130,7 @@ const Navbar = () => {
             Favourites
           </Link>
 
-          <button className="flex items-center gap-3 py-3 sm:py-4 border-b border-white/10 hover:text-primary transition">
-            <SearchIcon className="w-5 h-5" />
-            Search
-          </button>
+          {/* Search button removed from mobile sidebar because it was not functional */}
 
           {/* My Bookings link inside sidebar (visible when signed in) */}
           {isSignedIn && (
