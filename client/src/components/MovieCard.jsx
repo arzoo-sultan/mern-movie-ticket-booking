@@ -8,7 +8,7 @@ const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
 
   return (
-    <div className='flex flex-col justify-between p-3 bg-gray-800 rounded-2xl hover:-translate-y-1 transition duration-300 w-56'>
+    <div className='flex flex-col justify-between p-3 bg-gray-800 rounded-2xl hover:-translate-y-1 transition duration-300 w-full max-w-[14rem] sm:w-56'>
 
       <img
         onClick={() => {
@@ -17,7 +17,7 @@ const MovieCard = ({ movie }) => {
         }}
        src={`${image_base_url}${movie.poster_path}`}
         alt={movie.title}
-        className='rounded-lg h-52 w-full object-cover cursor-pointer'
+        className='rounded-lg h-48 sm:h-52 w-full object-cover cursor-pointer'
       />
 
       <p className='font-semibold mt-2 truncate'>
