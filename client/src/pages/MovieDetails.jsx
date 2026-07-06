@@ -126,24 +126,24 @@ const MovieDetails = () => {
               {movie.release_date?.split('-')[0]}
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 mt-4">
-              <button className="flex items-center gap-2 px-7 py-3 text-sm bg-gray-800 hover:bg-gray-700 rounded-md transition">
-                <PlayCircleIcon className="w-5 h-5" />
+            <div className="mt-4 flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 sm:gap-4">
+              <button className="flex shrink-0 items-center gap-2 rounded-md bg-gray-800 px-4 py-2.5 text-xs transition hover:bg-gray-700 sm:px-7 sm:py-3 sm:text-sm">
+                <PlayCircleIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                 Watch Trailer
               </button>
 
-                <a
+              <a
                 href="#dateSelect"
-                className="px-8 py-3 text-sm bg-primary hover:bg-primary-dull rounded-md transition font-medium"
+                className="shrink-0 rounded-md bg-primary px-4 py-2.5 text-xs font-medium transition hover:bg-primary-dull sm:px-8 sm:py-3 sm:text-sm"
               >
                 Buy Tickets
               </a>
 
               <button
                 onClick={toggleFavourite}
-                className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition"
+                className="shrink-0 rounded-full bg-gray-800 p-2.5 transition hover:bg-gray-700 sm:p-3"
               >
-                <HeartIcon className={`w-5 h-5 ${isFavourite ? 'fill-primary text-primary' : ''}`} />
+                <HeartIcon className={`h-4 w-4 sm:h-5 sm:w-5 ${isFavourite ? 'fill-primary text-primary' : ''}`} />
               </button>
             </div>
           </div>
@@ -152,7 +152,7 @@ const MovieDetails = () => {
         <h2 className="text-xl font-semibold mt-20">Your Favourite Cast</h2>
       </div>
 
-      //{/* Cast Carousel */}
+      {/* Cast Carousel */}
       <div className="overflow-x-auto no-scrollbar mt-8 pb-4">
         <div className="flex gap-5 w-max px-6 md:px-10 lg:px-16">
           {movie.casts?.slice(0, 12).map((cast, index) => (

@@ -64,18 +64,11 @@ const Navbar = () => {
               </UserButton.MenuItems>
             </UserButton>
           ) : (
-            <>
-              <SignInButton mode="modal">
-                <button className="px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base bg-primary hover:bg-primary-dull rounded-full font-semibold transition">
-                  Login
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="hidden md:block px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base border border-primary text-primary hover:bg-primary/10 rounded-full font-semibold transition">
-                  Sign Up
-                </button>
-              </SignUpButton>
-            </>
+            <SignInButton mode="modal">
+              <button className="px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base bg-primary hover:bg-primary-dull rounded-full font-semibold transition">
+                Login
+              </button>
+            </SignInButton>
           )}
 
           {/* Hamburger — hidden while sidebar is open to prevent icon overlap */}
@@ -144,15 +137,6 @@ const Navbar = () => {
             </Link>
           )}
 
-          {!isSignedIn && (
-            <div className="mt-6 sm:mt-8">
-              <SignUpButton mode="modal">
-                <button className="w-full py-3 border border-primary text-primary rounded-full font-semibold hover:bg-primary/10 transition">
-                  Sign Up
-                </button>
-              </SignUpButton>
-            </div>
-          )}
         </div>
 
       </div>
