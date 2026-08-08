@@ -2,7 +2,7 @@
 
 QuickShow is a modern full-stack Movie Ticket Booking Platform built using the MERN Stack. The application allows users to discover movies, book seats securely, manage bookings, and enjoy a seamless authentication experience with secure online payments.
 
-🚀 **Live Demo:** [View Live App](https://movie-ticket-booking-website-wine.vercel.app/)
+🚀 **Live Demo:** https://movie-ticket-booking-website-wine.vercel.app/
 ---
 
 # Features
